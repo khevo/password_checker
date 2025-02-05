@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Password Checker & Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .copy-button {
+            background-color: #28a745;
+            margin-left: 10px;
+            border-radius: 5px;
+        }
+        .suggested-password {
+            background-color: #f8f9fa;
+            padding: 10px;
+            margin-top: 10px;
+            display: none;
+        }
+        #contact-link {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            text-decoration: underline;
+            color: #0044cc;
+            font-size: 1em;
+        }
+        #contact-link:hover {
+            background-color: #e0e7ff;
+        }
+        #contact-link:visited {
+            color: #6a0dad;
+        }
+        #disclaimer {
+            font-size: 0.9em;
+            color: #555;
+            margin-top: 30px;
+            padding: 10px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            line-height: 1.6;
+        }
+        #disclaimer a {
+            color: #007bff;
+            text-decoration: underline;
+        }
+       #disclaimer a:hover {
+            color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <a href="https://www.linkedin.com/in/cyberseckay" id="contact-link" target="_blank">Contact Me</a>
+    <h1>Password Checker & Generator</h1>
+    
+    <div class="input-group">
+        <input type="password" id="password" placeholder="is my password breached? find out..">
+        <label style="font-size: 0.8em;">
+            <input type="checkbox" id="toggle-password" onclick="togglePasswordVisibility()"> Show Password
+        </label>
+        
+        <br><br>
+        <button onclick="checkPassword()">Check Password</button>
+    </div>
+
+    <div id="result"></div>
+    <div id="suggested-password" class="suggested-password">
+        <span id="new-password"></span>
+        <button onclick="copyPassword()" class="copy-button">Copy</button>
+    </div>
+
+    <script>
+        function checkPassword() {
+            const password = document.getElementById('password').value;
+            
+            fetch('/check_password', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({password: password})
+            })
+            .then(response => response.json())
+            .then(data => {
+                const resultDiv = document.getElementById('result');
+                const suggestedDiv = document.getElementById('suggested-password');
+                
+                resultDiv.textContent = data.message;
+                resultDiv.style.backgroundColor = data.is_common ? '#ffe6e6' : '#e6ffe6';
+                
+                if (data.is_common) {
+                    document.getElementById('new-password').textContent = data.suggested_password;
+                    suggestedDiv.style.display = 'block';
+                } else {
+                    suggestedDiv.style.display = 'none';
+                }
+            });
+        }
+
+        function copyPassword() {
+            const password = document.getElementById('new-password').textContent;
+            navigator.clipboard.writeText(password)
+                .then(() => alert('Password copied to clipboard!'))
+                .catch(err => console.error('Failed to copy: ', err));
+        }
+        
+        function togglePasswordVisibility() {
+            const passwordField = document.getElementById('password');
+            const toggleCheckbox = document.getElementById('toggle-password');
+            passwordField.type = toggleCheckbox.checked ? 'text' : 'password';
+        }
+    </script>
+    <div id="disclaimer">
+    <p><em>This is a simple Python tool that lets you check if a password or passphrase has been found in breached databases, using the <a href="https://haveibeenpwned.com/API/v2#PwnedPasswords" target="_blank">Pwned Passwords v2 API</a>. <br> All provided password data is <a href="https://en.wikipedia.org/wiki/K-anonymity" target="_blank">k-anonymized</a> before sending to the API, so plaintext passwords never leave your computer.</em></p>
+    </div>
+</body>
+</html>
