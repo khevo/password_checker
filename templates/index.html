@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>Password Checker & Generator</title>
     <style>
         body {
@@ -8,23 +10,29 @@
             max-width: 600px;
             margin: 30px auto;
             padding: 20px;
+            box-sizing: border-box;
         }
         .input-group {
             margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
         }
         input[type="text"], input[type="password"] {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             margin-bottom: 10px;
             border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 16px;
         }
         button {
-            padding: 10px 20px;
+            padding: 12px;
             background-color: #007bff;
             color: white;
             border: none;
             cursor: pointer;
             border-radius: 5px;
+            font-size: 16px;
         }
         button:hover {
             background-color: #0056b3;
@@ -33,31 +41,33 @@
             margin-top: 20px;
             padding: 10px;
             border-radius: 5px;
+            font-size: 16px;
+            text-align: center;
         }
         .copy-button {
             background-color: #28a745;
-            margin-left: 10px;
+            margin-top: 10px;
             border-radius: 5px;
+            font-size: 16px;
+            width: 100%;
         }
         .suggested-password {
             background-color: #f8f9fa;
             padding: 10px;
             margin-top: 10px;
             display: none;
+            text-align: center;
         }
         #contact-link {
-            position: absolute;
-            top: 20px;
-            right: 20px;
+            display: block;
+            text-align: right;
+            margin-bottom: 20px;
             text-decoration: underline;
             color: #0044cc;
             font-size: 1em;
         }
         #contact-link:hover {
             background-color: #e0e7ff;
-        }
-        #contact-link:visited {
-            color: #6a0dad;
         }
         #disclaimer {
             font-size: 0.9em;
@@ -75,6 +85,16 @@
        #disclaimer a:hover {
             color: #0056b3;
         }
+        @media (max-width: 768px) {
+            body {
+                max-width: 100%;
+                margin: 10px;
+                padding: 15px;
+            }
+            input, button {
+                font-size: 14px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -82,12 +102,12 @@
     <h1>Password Checker & Generator</h1>
     
     <div class="input-group">
-        <input type="password" id="password" placeholder="is my password breached? find out..">
-        <label style="font-size: 0.8em;">
+        <input type="password" id="password" placeholder="Is my password breached? Find out..">
+        <label style="font-size: 0.9em;">
             <input type="checkbox" id="toggle-password" onclick="togglePasswordVisibility()"> Show Password
         </label>
+        <br>
         
-        <br><br>
         <button onclick="checkPassword()">Check Password</button>
     </div>
 
@@ -134,12 +154,11 @@
         
         function togglePasswordVisibility() {
             const passwordField = document.getElementById('password');
-            const toggleCheckbox = document.getElementById('toggle-password');
-            passwordField.type = toggleCheckbox.checked ? 'text' : 'password';
+            passwordField.type = document.getElementById('toggle-password').checked ? 'text' : 'password';
         }
     </script>
     <div id="disclaimer">
-    <p><em>This is a simple Python tool that lets you check if a password or passphrase has been found in breached databases, using the <a href="https://haveibeenpwned.com/API/v2#PwnedPasswords" target="_blank">Pwned Passwords v2 API</a>. <br> All provided password data is <a href="https://en.wikipedia.org/wiki/K-anonymity" target="_blank">k-anonymized</a> before sending to the API, so plaintext passwords never leave your computer.</em></p>
+    <p><em>This is a simple Python tool that lets you check if a password or passphrase has been found in breached databases, using the <a href="https://haveibeenpwned.com/API/v2#PwnedPasswords" target="_blank">Pwned Passwords v2 API</a>. <br><br> All provided password data is <a href="https://en.wikipedia.org/wiki/K-anonymity" target="_blank">k-anonymized</a> before sending to the API, so plaintext passwords never leave your computer.</em></p>
     </div>
 </body>
 </html>
