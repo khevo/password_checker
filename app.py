@@ -54,7 +54,7 @@ def check_password_online(password):
 def home():
     return render_template('index.html')
 
-@app.route('/check_password', methods=['POST'])
+@app.route('/check_password', methods=['GET', 'POST'])
 def check_pass():  
     password = request.json.get('password', '')
     
